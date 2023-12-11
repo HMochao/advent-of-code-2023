@@ -30,23 +30,6 @@ public class Main {
         int i = 0;
         List<Long> stepsNumber = new ArrayList<>(currentLabel.size());
 
-//        while (stepNumber < 100000) {
-//            if(i == instructions.length) {
-//                i = 0;
-//            }
-//            Iterator<String> iterator = currentLabel.iterator();
-//            Set<String> newCurrent = new HashSet<>();
-//            String newNode = nodes.get(iterator.next()).getDirection(instructions[i]);
-//            if (newNode.contains("Z")) {
-//                    stepsNumber.add(stepNumber + 1);
-//            }
-//
-//            newCurrent.add(newNode);
-//
-//            currentLabel = newCurrent;
-//            i++;
-//            stepNumber++;
-//        }
         while (!currentLabel.isEmpty()) {
             if(i == instructions.length) {
                 i = 0;
