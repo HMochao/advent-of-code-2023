@@ -1,14 +1,11 @@
 package src;
 
-import src.Converter;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -46,13 +43,10 @@ public class Main {
                 .mapToObj(startingSeeds::get)
                 .collect(Collectors.toList());
 
-        List<Long> actualSeeds = new ArrayList<>();
 
         for (int i = 0; i < seeds.size(); i++) {
             for (long seed = seeds.get(i); seed < seeds.get(i) + ranges.get(i); seed++) {
 
-//            }
-//            for (Long seed : actualSeeds) {
                 long mapped = findMapping(seed, seedToSoil);
                 mapped = findMapping(mapped, soilToFertilizer);
                 mapped = findMapping(mapped, fertilizerToWater);

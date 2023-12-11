@@ -18,15 +18,15 @@ public class Main {
             List<Integer> winningNumbers = new ArrayList<>();
             List<Integer> myNumbers = new ArrayList<>();
             boolean endedWinningNumbers = false;
-            for (int i = 0; i < card.length; i++) {
-                if(card[i].equals("|")) {
+            for (String s : card) {
+                if (s.equals("|")) {
                     endedWinningNumbers = true;
                     continue;
                 }
-                if(!endedWinningNumbers) {
-                    winningNumbers.add(Integer.parseInt(card[i]));
+                if (!endedWinningNumbers) {
+                    winningNumbers.add(Integer.parseInt(s));
                 } else {
-                    myNumbers.add(Integer.parseInt(card[i]));
+                    myNumbers.add(Integer.parseInt(s));
                 }
             }
             cards.add(new Card(winningNumbers, myNumbers));
