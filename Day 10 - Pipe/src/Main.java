@@ -13,8 +13,9 @@ public class Main {
 
         String line;
         List<char[]> map = new ArrayList<>();
-        int i = 0;
-        int j = 0;
+        List<char[]> resultLoop = new ArrayList<>();
+        int startI = 0;
+        int startJ = 0;
         int currentLine = 0;
 
         while ((line = bufferedReader.readLine()) != null) {
@@ -23,21 +24,46 @@ public class Main {
             }
             String nums = line.replaceAll("\\s+$", "");
             if (nums.contains("S")) {
-                i = currentLine + 1;
-                j = nums.indexOf("S");
+                startI = currentLine + 1;
+                startJ = nums.indexOf("S");
             }
             map.add(nums.toCharArray());
+            resultLoop.add(nums.toCharArray());
             currentLine++;
         }
-        int result = getPartOneResult(map, i, j);
-        bufferedWriter.write(String.valueOf(result));
+
+        int partOneResult = getPartOneResult(map, startI, startJ, resultLoop) * 2;
+        int area = getPartTwoResult(map, resultLoop);
+
+        bufferedWriter.write("Part 1 result: " + partOneResult/2 + "\n");
+        bufferedWriter.write("Part 2 result: " + area);
         bufferedWriter.newLine();
 
         bufferedReader.close();
         bufferedWriter.close();
     }
 
-    private static int getPartOneResult(List<char[]> map, int i, int j) {
+    private static int getPartTwoResult(List<char[]> map, List<char[]> resultLoop) {
+        int area = 0;
+        for (int i = 0; i < map.size(); i++) {
+            boolean isInside = false;
+            for (int j = 0; j < map.get(i).length; j++) {
+                char current = map.get(i)[j];
+                if(isInside && !isPartOfPipeLoop(resultLoop.get(i)[j])) {
+                    area++;
+                } else if(isPartOfPipeLoop(resultLoop.get(i)[j]) && (current == '|' || current == '7' || current == 'F' || current == 'S')) {
+                    isInside = !isInside;
+                }
+            }
+        }
+        return area;
+    }
+
+    private static boolean isPartOfPipeLoop(char c) {
+        return c == 'S';
+    }
+
+    private static int getPartOneResult(List<char[]> map, int i, int j, List<char[]> resultLoop) {
         char finish = '.';
         int stepNumber = 0;
         boolean lastPositionHorizontal = false;
@@ -45,6 +71,7 @@ public class Main {
         boolean goRight = false;
         while (finish != 'S') {
             finish = map.get(i)[j];
+            resultLoop.get(i)[j] = 'S';
             ++stepNumber;
             switch (map.get(i)[j]) {
                 case '|':
@@ -91,28 +118,5 @@ public class Main {
         }
 
         return stepNumber / 2;
-    }
-
-    // last i: 118 last j 88 i: 118 j: 87 step number : 4350
-    private static int findPath(int i, int j, int lastI, int lastJ, List<char[]> map, int stepNumber, boolean lastPositionHorizontal) {
-        System.out.println("last i: " + lastI + " last j " + lastJ + " i: " + i + " j: " + j + " step number : " + stepNumber);
-        switch (map.get(i)[j]) {
-            case '|':
-                return findPath(i > lastI ? i + 1 : i - 1, j, i, j, map, ++stepNumber, false);
-            case '-':
-                return findPath(i, j > lastJ ? j + 1 : j - 1, i, j, map, ++stepNumber, true);
-            case 'L':
-                return findPath(lastPositionHorizontal ? i - 1 : i, lastPositionHorizontal ? j : j + 1, i, j, map, ++stepNumber, !lastPositionHorizontal);
-            case 'J':
-                return findPath(lastPositionHorizontal ? i - 1 : i, lastPositionHorizontal ? j : j - 1, i, j, map, ++stepNumber, !lastPositionHorizontal);
-            case '7':
-                return findPath(lastPositionHorizontal ? i + 1 : i, lastPositionHorizontal ? j : j - 1, i, j, map, ++stepNumber, !lastPositionHorizontal);
-            case 'F':
-                return findPath(lastPositionHorizontal ? i + 1 : i, lastPositionHorizontal ? j : j + 1, i, j, map, ++stepNumber, !lastPositionHorizontal);
-            case 'S':
-                return ++stepNumber;
-            default:
-                return 1;
-        }
     }
 }
