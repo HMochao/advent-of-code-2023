@@ -29,13 +29,11 @@ public class Main {
                 break;
             }
             char[] chars = line.replaceAll("\\s+$", "").toCharArray();
-
-            if (line.contains("#")) {
-                rowsWithGalaxies.add(currentLine);
-            }
             for (int i = 0; i < chars.length; i++) {
                 if (chars[i] == '#') {
                     columnsWithGalaxies.add(i);
+                    rowsWithGalaxies.add(currentLine);
+                    galaxies.add(new Pair<>(currentLine, i));
                 }
             }
             map.add(line.chars().mapToObj(c -> (char) c).collect(Collectors.toList()));
@@ -44,14 +42,6 @@ public class Main {
 
         List<Integer> rowsWithoutGalaxies = IntStream.range(0, map.get(0).size()).filter(a -> !rowsWithGalaxies.contains(a)).boxed().collect(Collectors.toList());
         List<Integer> columnsWithoutGalaxies = IntStream.range(0, map.size()).filter(a -> !columnsWithGalaxies.contains(a)).boxed().collect(Collectors.toList());
-
-        for (int i = 0; i < map.size(); i++) {
-            for (int j = 0; j < map.get(i).size(); j++) {
-                if (map.get(i).get(j) == '#')
-                    galaxies.add(new Pair<>(i, j));
-            }
-        }
-
 
         int result = 0;
         long result2 = 0;
